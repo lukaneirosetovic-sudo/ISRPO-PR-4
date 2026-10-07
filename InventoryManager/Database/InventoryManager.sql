@@ -1,0 +1,168 @@
+﻿USE [master]
+GO
+/****** Объект:  Database [InventoryManager]    Дата создания скрипта: 14.09.2026 11:59:02 ******/ 
+CREATE DATABASE [InventoryManager]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'InventoryManager', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\InventoryManager.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'InventoryManager_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\InventoryManager_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [InventoryManager] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [InventoryManager].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [InventoryManager] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [InventoryManager] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [InventoryManager] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [InventoryManager] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [InventoryManager] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [InventoryManager] SET AUTO_CLOSE ON 
+GO
+ALTER DATABASE [InventoryManager] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [InventoryManager] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [InventoryManager] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [InventoryManager] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [InventoryManager] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [InventoryManager] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [InventoryManager] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [InventoryManager] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [InventoryManager] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [InventoryManager] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [InventoryManager] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [InventoryManager] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [InventoryManager] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [InventoryManager] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [InventoryManager] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [InventoryManager] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [InventoryManager] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [InventoryManager] SET  MULTI_USER 
+GO
+ALTER DATABASE [InventoryManager] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [InventoryManager] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [InventoryManager] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [InventoryManager] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [InventoryManager] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [InventoryManager] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [InventoryManager] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [InventoryManager] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [InventoryManager]
+GO
+/****** Объект:  Table [dbo].[Categories]    Дата создания скрипта: 14.09.2026 11:59:02 ******/ 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Categories](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Объект:  Table [dbo].[Products]    Дата создания скрипта: 14.09.2026 11:59:02 ******/ 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Products](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](200) NOT NULL,
+	[Article] [nvarchar](50) NULL,
+	[CategoryId] [int] NULL,
+	[Price] [decimal](18, 2) NULL,
+	[CurrentStock] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Объект:  Table [dbo].[StockMovements]    Дата создания скрипта: 14.09.2026 11:59:02 ******/ 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[StockMovements](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[ProductId] [int] NOT NULL,
+	[MovementType] [nvarchar](50) NOT NULL,
+	[Quantity] [int] NOT NULL,
+	[MovementDate] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[Categories] ON 
+
+INSERT [dbo].[Categories] ([Id], [Name]) VALUES (1, N'Электроника')
+INSERT [dbo].[Categories] ([Id], [Name]) VALUES (2, N'Канцелярия')
+INSERT [dbo].[Categories] ([Id], [Name]) VALUES (3, N'Продукты питания')
+SET IDENTITY_INSERT [dbo].[Categories] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Products] ON 
+
+INSERT [dbo].[Products] ([Id], [Name], [Article], [CategoryId], [Price], [CurrentStock]) VALUES (1, N'Ноутбук ASUS', N'NB-001', 1, CAST(55000.00 AS Decimal(18, 2)), 10)
+INSERT [dbo].[Products] ([Id], [Name], [Article], [CategoryId], [Price], [CurrentStock]) VALUES (2, N'Ручка шариковая', N'CN-015', 2, CAST(25.50 AS Decimal(18, 2)), 500)
+INSERT [dbo].[Products] ([Id], [Name], [Article], [CategoryId], [Price], [CurrentStock]) VALUES (3, N'Сыр Российский', N'FD-102', 3, CAST(450.00 AS Decimal(18, 2)), 40)
+SET IDENTITY_INSERT [dbo].[Products] OFF
+GO
+ALTER TABLE [dbo].[Products] ADD  DEFAULT ((0)) FOR [Price]
+GO
+ALTER TABLE [dbo].[Products] ADD  DEFAULT ((0)) FOR [CurrentStock]
+GO
+ALTER TABLE [dbo].[StockMovements] ADD  DEFAULT (getdate()) FOR [MovementDate]
+GO
+ALTER TABLE [dbo].[Products]  WITH CHECK ADD FOREIGN KEY([CategoryId])
+REFERENCES [dbo].[Categories] ([Id])
+ON DELETE SET NULL
+GO
+ALTER TABLE [dbo].[StockMovements]  WITH CHECK ADD FOREIGN KEY([ProductId])
+REFERENCES [dbo].[Products] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[StockMovements]  WITH CHECK ADD CHECK  (([Quantity]>(0)))
+GO
+USE [master]
+GO
+ALTER DATABASE [InventoryManager] SET  READ_WRITE 
+GO
+
